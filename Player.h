@@ -1,15 +1,24 @@
-struct Player{
+class Player
+{
+private:
     char* name;
     int level;
     int force;
     int maxHP;
     int HP;
     int coins;
-    public:
-    Player( char* name,int maxHP, int force);
+public:
+    Player(char* name,int maxHP, int force);
+    ~Player();
+};
+
+Player::~Player()
+{
+}
+    
 }
 
-Player( char* name,int maxHP=100, int force=5)
+Player::Player( char* name,int maxHP=100, int force=5)
 {
     this.name= name;
     this.maxHP= maxHP;

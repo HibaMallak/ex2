@@ -7,7 +7,7 @@
 #define COINS_IN_START 0
 
 
-Player::Player(char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE) : m_name(name), m_level(FIRST),
+Player::Player(const char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE) : m_name(name), m_level(FIRST),
                m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
 {
     if(maxHP<0)
@@ -23,28 +23,7 @@ Player::Player(char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE) : m_
 
 }
 
-Player::~Player()=default;
 
-Player::Player(const Player& player)
-{
-    this->m_name= player.m_name;
-    this->m_maxHP= player.m_maxHP;
-    this->m_force= player.m_force;
-    this->m_coins= player.m_coins;
-    this->m_HP= player.m_maxHP;
-    this->m_level= player.m_level;
-}
-
-Player& Player::operator=(const Player p)
-{
-    this->m_name= p.m_name;
-    this->m_maxHP= p.m_maxHP;
-    this->m_force= p.m_force;
-    this->m_coins= p.m_coins;
-    this->m_HP= p.m_maxHP;
-    this->m_level= p.m_level;
-    return *this;
-}
 void Player::printInfo()
 {
     printPlayerInfo(this->m_name, this->m_level, this->m_force, this->m_HP, this->m_coins);

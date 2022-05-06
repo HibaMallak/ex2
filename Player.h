@@ -1,8 +1,6 @@
 #ifndef EX2_Player_H
 #define EX2_Player_H
 #include "utilities.h"
-//#include "string"
-//using std::string;
 
 class Player{
 public:
@@ -14,7 +12,7 @@ public:
      * @return
      *      A new instance of Player.
     */
-    Player(char* name,int maxHP, int force);
+    Player(const char* name,int maxHP, int force);
 
 
     /*
@@ -24,7 +22,7 @@ public:
      * @return
      *      A copied instance of p.
     */
-    Player(const Player& p);
+    Player(const Player& p)=default;
 
 
     /*
@@ -33,7 +31,7 @@ public:
      * @return
      *      Deletes this instance of Player.
     */
-    ~Player();
+    ~Player()=default;
 
 
     /*
@@ -43,7 +41,7 @@ public:
      * @return  
      *      ///////
     */
-    Player& operator=(const Player p);
+    Player& operator=(Player *p)=default;
 
 
     /*

@@ -59,8 +59,35 @@ public:
 
     //TODO: complete the Mtmchkin class.
 
+    Mtmchkin(const Mtmchkin& p);
+
+
+    /*
+     * D'tor of Mtmchkin class
+     *
+     * @return
+     *      Deletes this instance of Mtmchkin.
+    */
+    ~Mtmchkin();
+
+
+    /*
+     * Assignment operator
+     *
+     * @param p - The Mtmchkin to assign from.
+     * @return
+     *      ///////
+    */
+    Mtmchkin & operator=(Mtmchkin *p);
+
 private:
     //TODO: complete the Mtmchkin class.
+
+    GameStatus m_gameStatus;
+    int m_currentCard;
+    int m_amountOfCards;
+    Player m_player;
+    Card* m_cardARR;
 
 };
 

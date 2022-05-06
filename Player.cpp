@@ -112,7 +112,7 @@ void Player::damage(int damageToMake)
 
 bool Player::isKnockedOut()
 {
-    if(!(this->m_HP))
+    if(this->m_HP)
     {
         return true;
     }

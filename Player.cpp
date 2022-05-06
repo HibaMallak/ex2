@@ -4,30 +4,26 @@
 #define DEFAULT_MAXHP 100
 #define FIRST 1
 #define MAX_LEVEL 10
+#define COINS_IN_START 0
 
 
-Player::Player( char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE)
+Player::Player(char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE) : m_name(name), m_level(FIRST),
+               m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
 {
-    this->m_name= name;
-    if(maxHP>=0)
-    {
-        this->m_maxHP= maxHP;
-    }
-    else
+    if(maxHP<0)
     {
         this->m_maxHP= DEFAULT_MAXHP;
+        this->m_HP=DEFAULT_MAXHP;
     }
-    if(force>=0)
-    {
-        this->m_force= force;
-    }
-    else
+
+    if(force<0)
     {
         this->m_force= DEFAULT_FORCE;
     }
-    this->m_HP= maxHP;
-    this->m_level= FIRST;
+
 }
+
+Player::~Player()=default;
 
 Player::Player(const Player& player)
 {
@@ -37,11 +33,6 @@ Player::Player(const Player& player)
     this->m_coins= player.m_coins;
     this->m_HP= player.m_maxHP;
     this->m_level= player.m_level;
-}
-
-Player::~Player()
-{
-
 }
 
 Player& Player::operator=(const Player p)
@@ -77,7 +68,7 @@ void Player::buff(int forceToAdd)
     if(forceToAdd>0)
     {
         this->m_force += forceToAdd;
-    } 
+    }
 }
 
 void Player::heal(int pointsToHeal)
@@ -148,7 +139,6 @@ int Player::getAttackStrength()
 {
     return this->m_force + this->m_level;
 }
-
 
 
 

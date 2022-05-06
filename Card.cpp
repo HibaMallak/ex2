@@ -2,10 +2,8 @@
 #define WIN true
 #define LOSS false
 
-Card::Card(CardType type, const CardStats &stats)
+Card::Card(CardType type, const CardStats &stats) : m_effect(type), m_stats(stats)
 {
-    this->m_effect=type;
-
     if (type == CardType::Battle)
     {
         this->m_stats.loot=stats.loot;
@@ -19,7 +17,6 @@ Card::Card(CardType type, const CardStats &stats)
         this->m_stats.buff=stats.buff;
     }
 
-
     if (type == CardType::Treasure)
     {
         this->m_stats.loot=stats.loot;
@@ -31,6 +28,7 @@ Card::Card(CardType type, const CardStats &stats)
         this->m_stats.heal=stats.heal;
     }
 }
+
 
 void Card::applyEncounter(Player& player) const
 {

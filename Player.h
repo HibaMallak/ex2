@@ -1,6 +1,8 @@
 #ifndef EX2_Player_H
 #define EX2_Player_H
 #include "utilities.h"
+//#include "string"
+//using std::string;
 
 class Player{
 public:

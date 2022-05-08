@@ -31,6 +31,33 @@ public:
 
 
     /*
+     * C'tor of Mtmchkin class:
+     * @param m - A reference of an existing Mtmchkin .
+     *
+    */
+    Mtmchkin(const Mtmchkin& m);
+
+
+    /*
+     * D'tor of Mtmchkin class
+     *
+     * @return
+     *      Deletes this instance of Mtmchkin.
+    */
+    ~Mtmchkin();
+
+
+    /*
+     * Assignment operator
+     *
+     * @param p - The Mtmchkin to assign from.
+     * @return
+     *      default
+    */
+    Mtmchkin& operator=(Mtmchkin& p);
+
+
+    /*
      * Play the next Card - according to the instruction in the exercise document
      *
      * @return
@@ -57,28 +84,6 @@ public:
      */
     GameStatus getGameStatus() const;
 
-    //TODO: complete the Mtmchkin class.
-
-    Mtmchkin(const Mtmchkin& p);
-
-
-    /*
-     * D'tor of Mtmchkin class
-     *
-     * @return
-     *      Deletes this instance of Mtmchkin.
-    */
-    ~Mtmchkin();
-
-
-    /*
-     * Assignment operator
-     *
-     * @param p - The Mtmchkin to assign from.
-     * @return
-     *      ///////
-    */
-    Mtmchkin & operator=(Mtmchkin *p);
 
 private:
     //TODO: complete the Mtmchkin class.

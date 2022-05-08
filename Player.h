@@ -1,7 +1,8 @@
 #ifndef EX2_Player_H
 #define EX2_Player_H
 #include "utilities.h"
-
+#define DEFAULT_FORCE 5
+#define DEFAULT_MAXHP 100
 class Player{
 public:
     /*
@@ -12,7 +13,7 @@ public:
      * @return
      *      A new instance of Player.
     */
-    Player(const char* name,int maxHP, int force);
+    Player(const char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE);
 
 
     /*
@@ -41,7 +42,7 @@ public:
      * @return  
      *      default
     */
-    Player& operator=(Player p) =default;
+    Player& operator=(Player& p) =default;
 
 
     /*
@@ -141,7 +142,7 @@ public:
     int getAttackStrength();
 
 private:
-    char* m_name;
+    const char *m_name;
     int m_level;
     int m_force;
     int m_maxHP;

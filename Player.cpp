@@ -7,8 +7,9 @@
 #define COINS_IN_START 0
 
 
-Player::Player(const char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE) : m_name(name), m_level(FIRST),
-               m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
+Player::Player(const char* name,int maxHP, int force) :
+m_name(name), m_level(FIRST), m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
+
 {
     if(maxHP<=0)
     {
@@ -118,7 +119,6 @@ int Player::getAttackStrength()
 {
     return this->m_force + this->m_level;
 }
-
 
 
 

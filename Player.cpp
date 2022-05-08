@@ -10,13 +10,13 @@
 Player::Player(const char* name,int maxHP=DEFAULT_MAXHP, int force=DEFAULT_FORCE) : m_name(name), m_level(FIRST),
                m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
 {
-    if(maxHP<0)
+    if(maxHP<=0)
     {
         this->m_maxHP= DEFAULT_MAXHP;
-        this->m_HP=DEFAULT_MAXHP;
+        this->m_HP= DEFAULT_MAXHP;
     }
 
-    if(force<0)
+    if(force<=0)
     {
         this->m_force= DEFAULT_FORCE;
     }
@@ -33,7 +33,7 @@ void Player::levelUp()
 {
     if(this->m_level!= MAX_LEVEL)
     {
-        this->m_level++;
+        ++this->m_level;
     }
 }
 
@@ -82,7 +82,7 @@ void Player::damage(int damageToMake)
 
 bool Player::isKnockedOut()
 {
-    if(this->m_HP)
+    if(this->m_HP <=0)
     {
         return true;
     }
@@ -99,7 +99,7 @@ void Player::addCoins(int coinsToAdd)
 
 bool Player::pay(int coinsToPay)
 {
-    if(coinsToPay>0)
+    if(coinsToPay>=0)
     {
         if(this->m_coins - coinsToPay <0)
         {
@@ -111,13 +111,16 @@ bool Player::pay(int coinsToPay)
             return true;
         }
     }
-    return true;
+    return false;
 }
 
 int Player::getAttackStrength()
 {
     return this->m_force + this->m_level;
 }
+
+
+
 
 
 

@@ -39,9 +39,9 @@ public:
      *
      * @param p - The player to assign from.
      * @return  
-     *      ///////
+     *      default
     */
-    Player& operator=(Player *p)=default;
+    Player& operator=(Player p) =default;
 
 
     /*

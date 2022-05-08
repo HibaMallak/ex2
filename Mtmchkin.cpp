@@ -24,7 +24,7 @@ void Mtmchkin::playNextCard()
     this->m_cardARR[this->m_currentCard].printInfo();
     this->m_cardARR[this->m_currentCard].applyEncounter(this->m_player);
     this->m_player.printInfo();
-    if(this->m_player.getLevel == 10)
+    if(this->m_player.getLevel() == 10)
     {
         this->m_gameStatus= GameStatus::Win;
     }

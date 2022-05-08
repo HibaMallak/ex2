@@ -21,14 +21,6 @@ GameStatus Mtmchkin::getGameStatus() const
 
 void Mtmchkin::playNextCard()
 {
-    if(this->m_currentCard == this->m_amountOfCards -1)
-    {
-        this->m_currentCard= INDEX_OF_FIRST_CARD;
-    }
-    else
-    {
-        ++this->m_currentCard;
-    }
     this->m_cardARR[this->m_currentCard].printInfo();
     this->m_cardARR[this->m_currentCard].applyEncounter(this->m_player);
     this->m_player.printInfo();
@@ -40,6 +32,14 @@ void Mtmchkin::playNextCard()
     {
         this->m_gameStatus= GameStatus::Loss;  
     }   
+    if(this->m_currentCard == this->m_amountOfCards -1)
+    {
+        this->m_currentCard= INDEX_OF_FIRST_CARD;
+    }
+    else
+    {
+        ++this->m_currentCard;
+    }
 }
 
 
@@ -51,6 +51,5 @@ bool Mtmchkin::isOver()
     }
     return false;
 }
-
 
 

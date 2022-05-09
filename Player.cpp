@@ -100,7 +100,7 @@ void Player::addCoins(int coinsToAdd)
 
 bool Player::pay(int coinsToPay)
 {
-    if(coinsToPay>=0)
+    if(coinsToPay>0)
     {
         if(this->m_coins - coinsToPay <0)
         {
@@ -112,7 +112,7 @@ bool Player::pay(int coinsToPay)
             return true;
         }
     }
-    return false;
+    return true;
 }
 
 int Player::getAttackStrength()

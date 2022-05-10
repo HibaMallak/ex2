@@ -8,7 +8,7 @@
 
 
 Player::Player(const char* name,int maxHP, int force) :
-m_name(name), m_level(FIRST), m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
+        m_name(name), m_level(FIRST), m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
 
 {
     if(maxHP<=0)
@@ -119,7 +119,6 @@ int Player::getAttackStrength()
 {
     return this->m_force + this->m_level;
 }
-
 
 
 

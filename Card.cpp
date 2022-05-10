@@ -35,7 +35,7 @@ void Card::applyEncounter(Player& player) const
 
     if (this->m_effect== CardType::Battle)
     {
-        if (this->m_stats.force <= player.getAttackStrength())
+        if (player.getAttackStrength() >= this->m_stats.force)
         {
             player.levelUp();
             player.addCoins(this->m_stats.loot) ;
@@ -55,7 +55,7 @@ void Card::applyEncounter(Player& player) const
 
     if (this->m_effect== CardType::Buff && player.pay(this->m_stats.cost))
     {
-        player.buff(this->m_stats.force);
+        player.buff(this->m_stats.buff);
     }
 
     if (this->m_effect== CardType::Treasure)

@@ -2,8 +2,8 @@
 #define INDEX_OF_FIRST_CARD 0
 
 Mtmchkin::Mtmchkin(const char* playerName, const Card* cardsArray, int numOfCards) :
- m_gameStatus(GameStatus::MidGame), m_currentCard(INDEX_OF_FIRST_CARD), m_amountOfCards(numOfCards),
- m_player(playerName)
+        m_gameStatus(GameStatus::MidGame), m_currentCard(INDEX_OF_FIRST_CARD), m_amountOfCards(numOfCards),
+        m_player(playerName)
 {
     this->m_cardARR= new Card[numOfCards];
     for (int i=0; i<numOfCards; ++i)
@@ -13,7 +13,7 @@ Mtmchkin::Mtmchkin(const char* playerName, const Card* cardsArray, int numOfCard
 }
 
 Mtmchkin::Mtmchkin(const Mtmchkin& m) : m_gameStatus(m.m_gameStatus), m_currentCard(m.m_currentCard),
-m_amountOfCards(m.m_amountOfCards),m_player(m.m_player)
+                                        m_amountOfCards(m.m_amountOfCards),m_player(m.m_player)
 {
     this->m_cardARR= new Card[m_amountOfCards];
     for (int i=0; i<m_amountOfCards; ++i)
@@ -94,5 +94,4 @@ bool Mtmchkin::isOver() const
     }
     return false;
 }
-
 

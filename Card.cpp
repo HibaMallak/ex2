@@ -1,6 +1,7 @@
 #include "Card.h"
-#define WIN true
-#define LOSS false
+
+static const bool WIN = true;
+static const bool LOSS = false;
 
 Card::Card(CardType type, const CardStats &stats) : m_effect(type), m_stats(stats)
 {

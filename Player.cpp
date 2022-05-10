@@ -1,14 +1,8 @@
-
 #include "Player.h"
-#define DEFAULT_FORCE 5
-#define DEFAULT_MAXHP 100
-#define FIRST 1
-#define MAX_LEVEL 10
-#define COINS_IN_START 0
 
 
 Player::Player(const char* name,int maxHP, int force) :
-        m_name(name), m_level(FIRST), m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_IN_START)
+        m_name(name), m_level(FIRST), m_force(force), m_maxHP(maxHP), m_HP(maxHP), m_coins(COINS_ON_START)
 
 {
     if(maxHP<=0)

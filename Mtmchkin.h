@@ -7,6 +7,7 @@
 #include "Card.h"
 #include <iostream>
 
+static const int INDEX_OF_FIRST_CARD = 0;
 /*
  * GameStatus:
  * MidGame - The game is still active and the player continues to encounter cards.
@@ -92,7 +93,7 @@ private:
     int m_currentCard;
     int m_amountOfCards;
     Player m_player;
-    Card* m_cardARR;
+    Card* m_cardsArr;
 
 };
 

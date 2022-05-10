@@ -1,8 +1,13 @@
 #ifndef EX2_Player_H
 #define EX2_Player_H
 #include "utilities.h"
-#define DEFAULT_FORCE 5
-#define DEFAULT_MAXHP 100
+
+static const int DEFAULT_FORCE = 5;
+static const int DEFAULT_MAXHP = 100;
+static const int FIRST = 1;
+static const int MAX_LEVEL = 10;
+static const int COINS_ON_START = 0;
+
 class Player{
 public:
     /*

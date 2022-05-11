@@ -34,7 +34,9 @@ public:
     /*
      * C'tor of Mtmchkin class:
      * @param m - A reference of an existing Mtmchkin .
-     *
+     * 
+     * @result
+     *      A coppied instance of Mtmchkin
     */
     Mtmchkin(const Mtmchkin& m);
 
@@ -94,6 +96,15 @@ private:
     Player m_player;
     Card* m_cardsArr;
 
+    /*
+     * Copy the cardsArray:
+     *
+     * @param cardsArray - A ptr to the cards deck.
+     * @param numOfCards - Num of cards in the deck.
+     * 
+     * @return
+     *      A coppied array of the cardsArray.
+    */
     Card* copyCardsArray(const Card* cardsArray, int numOfCards);
 
 };

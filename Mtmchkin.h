@@ -87,13 +87,14 @@ public:
 
 
 private:
-    //TODO: complete the Mtmchkin class.
 
     GameStatus m_gameStatus;
     int m_currentCard;
     int m_amountOfCards;
     Player m_player;
     Card* m_cardsArr;
+
+    Card* copyCardsArray(const Card* cardsArray, int numOfCards);
 
 };
 

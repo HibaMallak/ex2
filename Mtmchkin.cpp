@@ -2,24 +2,17 @@
 
 Mtmchkin::Mtmchkin(const char* playerName, const Card* cardsArray, int numOfCards) :
         m_gameStatus(GameStatus::MidGame), m_currentCard(INDEX_OF_FIRST_CARD), m_amountOfCards(numOfCards),
-        m_player(playerName)
+        m_player(playerName), m_cardsArr(copyCardsArray(cardsArray, numOfCards))
 {
-    this->m_cardsArr= new Card[numOfCards];
-    for (int i= INDEX_OF_FIRST_CARD; i<numOfCards; ++i)
-    {
-        this->m_cardsArr[i]=cardsArray[i];
-    }
+
 }
 
 
 Mtmchkin::Mtmchkin(const Mtmchkin& m) : m_gameStatus(m.m_gameStatus), m_currentCard(m.m_currentCard),
-                                        m_amountOfCards(m.m_amountOfCards),m_player(m.m_player)
+                                        m_amountOfCards(m.m_amountOfCards),m_player(m.m_player), 
+                                        m_cardsArr(copyCardsArray(m.m_cardsArr, m.m_amountOfCards))
 {
-    this->m_cardsArr= new Card[m_amountOfCards];
-    for (int i= INDEX_OF_FIRST_CARD; i<m_amountOfCards; ++i)
-    {
-        this->m_cardsArr[i]=m.m_cardsArr[i];
-    }
+    
 }
 
 
@@ -41,13 +34,7 @@ Mtmchkin& Mtmchkin:: operator=(Mtmchkin &m)
     this->m_currentCard = m.m_currentCard;
     this->m_amountOfCards = m.m_amountOfCards;
     this->m_player = m.m_player;
-    this->m_cardsArr = new Card[m_amountOfCards];
-
-    for(int i= INDEX_OF_FIRST_CARD; i < m_amountOfCards; i++)
-    {
-        m_cardsArr[i] = m.m_cardsArr[i];
-    }
-
+    this->m_cardsArr= copyCardsArray(m.m_cardsArr, m.m_amountOfCards);
     return *this;
 }
 
@@ -93,4 +80,15 @@ bool Mtmchkin::isOver() const
         return true;
     }
     return false;
+}
+
+
+Card* Mtmchkin::copyCardsArray(const Card* cardsArray, int numOfCards)
+{
+    Card* cardsArr= new Card[numOfCards];
+    for (int i= INDEX_OF_FIRST_CARD; i<numOfCards; ++i)
+    {
+        cardsArr[i]= cardsArray[i];
+    }
+    return cardsArr;
 }

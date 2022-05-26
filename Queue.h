@@ -17,7 +17,9 @@ private:
     int m_size;
 
 public:
-
+    class Iterator;
+    Iterator begin() const;
+    Iterator end() const;
     Queue();
     Queue(const Queue<T> &q);
     ~Queue();
@@ -28,6 +30,49 @@ public:
     int size() const;
 
 };
+
+template<typename T>
+class Queue<T>::Iterator
+{
+    private:
+        const Queue* m_queue;
+        int m_index;
+        Iterator(const Queue<T>* queue, int index);
+        friend class Queue<T>;
+
+    public:
+        const T& operator*() const;
+        Iterator& operator++();
+        bool operator==(const Iterator& it) const;
+        bool operator!=(const Iterator& it) const;
+        Iterator(const Iterator&) = default;
+        Iterator& operator=(const Iterator&) = default;
+};
+
+template<typename T>
+Queue<T>::Iterator::Iterator(const Queue<T>* queue, int index): m_queue(queue), m_index(index)
+{
+
+}
+template<typename T>
+typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
+{
+    //check in boundries
+    ++index;
+    return this*;   
+}
+
+template<typename T>
+const T& Queue<T>::Iterator::operator*() const
+{
+
+}
+
+template<typename T>
+bool Queue<T>::Iterator::operator!=(const Iterator& i) const 
+{
+    return !(*this == i);
+}
 
 
 template<typename T>
@@ -73,7 +118,7 @@ void Queue<T>:: pushBack(const T& data)
 {
     this->m_tail->m_nextNode= new Node<T>();
     this->m_tail= this->m_tail->m_nextNode;
-    this->m_tail->m_data=data;
+    this->m_tail->m_data= data;
     ++this->m_size;
 }
 
@@ -100,8 +145,8 @@ void Queue<T>:: popFront()
         this->m_tail= this->m_head;
     }
 
-    m_head->m_nextNode=m_head->m_nextNode->m_nextNode;
-     delete toDelete;
+    m_head->m_nextNode= m_head->m_nextNode->m_nextNode;
+    delete toDelete;
     --this->m_size;
 
 }
@@ -141,5 +186,7 @@ void transform(Queue<T>& q, S func)
         --QueueSize;
     }
 }
+
+
 
 #endif

@@ -246,7 +246,7 @@ void Queue<T>:: pushBack(const T& data)
 template <typename T>
 T& Queue<T>:: front()
 {
-    if(m_size == INITIAL_SIZE)                       //new: throw
+    if(this->m_size == INITIAL_SIZE)                       //new: throw
     {
         throw Queue<T>::EmptyQueue();
     }
@@ -267,7 +267,7 @@ void Queue<T>:: popFront()
     }
     else
     {
-        m_head->m_nextNode= m_head->m_nextNode->m_nextNode;
+        this->m_head->m_nextNode= m_head->m_nextNode->m_nextNode;
     }
     delete toDelete;
     --this->m_size;

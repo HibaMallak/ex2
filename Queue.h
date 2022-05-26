@@ -6,14 +6,18 @@ class Queue
 {
 private:
     static const int INITIAL_SIZE = 0;
-    struct Node
+    struct Node<T>
     {
         T m_data;
-        Node *m_nextNode= nullptr;
+        Node<T> *m_nextNode= nullptr;                    
+        Node<T>()=default;                               //new
+        Node<T>(const Node<T>& node)=default;            //new
+        Node<T>& operator=(const Node<T>& node)=default; //new
+        ~Node<T>()=default;                              //new
     };
 
-    Node *m_head;
-    Node *m_tail;
+    Node<T> *m_head;
+    Node<T> *m_tail;
     int m_size;
 
 public:
@@ -34,6 +38,7 @@ public:
     void popFront();
     int size() const;
 
+    class EmptyQueue{};                                   //new
 };
 
 
@@ -42,8 +47,8 @@ class Queue<T>::Iterator
 {
 private:
 
-    Node* m_pointer;
-    Iterator(Node* pointer);
+    Node<T>* m_pointer;
+    Iterator(Node<T>* pointer);
     friend class Queue<T>;
 
 public:
@@ -52,18 +57,24 @@ public:
     bool operator!=(const Iterator& it) const;
     Iterator(const Iterator&) = default;
     Iterator& operator=(const Iterator&) = default;
+
+     class InvalidOperation&{};                             //new
 };
 
 
 template<typename T>
-Queue<T>::Iterator::Iterator(Node* pointer): m_pointer(pointer)
+Queue<T>::Iterator::Iterator(Node<T>*  pointer): m_pointer(pointer)
 {
 }
 
 template<class T>
 typename Queue<T>::Iterator Queue<T>::begin()
 {
-    return Iterator(m_head);
+    if (this->m_size == INITIAL_SIZE)                      //new: throw
+    {
+        throw Queue<T>::EmptyQueue();
+    }
+    return Iterator(this->m_head->m_nextNode);             //->m_nextNode
 
 }
 
@@ -76,7 +87,11 @@ typename Queue<T>::Iterator Queue<T>::end()
 template<typename T>
 typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
 {
-    m_pointer=m_pointer->m_nextNode;
+    if(this->m_pointer->m_nextNode == nullptr)                   //new: throw
+    {
+        throw InvalidOperation(); 
+    }
+    m_pointer= m_pointer->m_nextNode;
     return *this;
 }
 
@@ -89,7 +104,7 @@ T& Queue<T>::Iterator::operator*() const
 template<typename T>
 bool Queue<T>::Iterator::operator!=(const Iterator& i) const
 {
-    return this->m_pointer!=i.m_pointer;
+    return this->m_pointer!=i->m_pointer;                      //new: changed i.pointer to i->pointer
 }
 
 
@@ -99,7 +114,7 @@ class Queue<T>::ConstIterator
 private:
 
     Node* m_pointer;
-    ConstIterator(Node* pointer);
+    ConstIterator(Node<T>* pointer);
     friend class Queue<T>;
     friend class Queue<T>::Iterator;
     ConstIterator(const Iterator& it);
@@ -113,7 +128,7 @@ public:
 };
 
 template<typename T>
-Queue<T>::ConstIterator::ConstIterator(Node* pointer): m_pointer(pointer)
+Queue<T>::ConstIterator::ConstIterator(Node<T>* pointer): m_pointer(pointer)
 {
 
 }
@@ -127,7 +142,11 @@ Queue<T>::ConstIterator::ConstIterator(const Iterator& it): m_pointer(it->m_poin
 template<class T>
 typename Queue<T>::ConstIterator Queue<T>::begin() const
 {
-    return ConstIterator(m_head);
+    if (this->m_size == INITIAL_SIZE)                              //new: throw
+    {
+        throw Queue<T>::EmptyQueue();
+    }
+    return ConstIterator(this->m_head->m_nextNode);                //->m_nextNode
 }
 
 template<class T>
@@ -139,6 +158,10 @@ typename Queue<T>::ConstIterator Queue<T>::end() const
 template<typename T>
 typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++() const
 {
+    if(this->m_pointer->m_nextNode == nullptr)                   //new: throw
+    {
+        throw InvalidOperation(); 
+    }
     m_pointer=m_pointer->m_nextNode;
     return *this;
 }
@@ -152,52 +175,69 @@ const T& Queue<T>::ConstIterator::operator*() const
 template<typename T>
 bool Queue<T>::ConstIterator::operator!=(const ConstIterator& i) const
 {
-    return this->m_pointer!=i.m_pointer;
+    return this->m_pointer!=i->m_pointer;                      //new: changed i.pointer to i->pointer
 }
 
 
 template<typename T>
 Queue<T>::Queue() : m_size(INITIAL_SIZE), m_head(new Node<T>()), m_tail(this->m_head)
 {
-
 }
 
 
 template <typename T>
 Queue<T>::Queue(const Queue<T>& q)
 {
-    // do with iterator & pushback
-    // build a new one
+    this->m_head= Queue();                           //new: implemented
+    for(Iterator it = q.begin(); it != q.end(); ++it)
+    {
+        this.pushBack(it->m_pointer->m_data);
+    }
+    this->m_size = q.size();
 }
 
 template <typename T>
-Queue<T>& Queue<T>::operator=(const Queue<T>& q)
+Queue<T>& Queue<T>::operator=(const Queue<T>& q)             //new: implemented
 {
     if(*this == &q)
     {
         return *this;
     }
-
-    //do pop until empty - do iterator (loop)- push in loop
+    for(Iterator it = q.begin();  it!= q.end(); ++it)
+    {   
+        this->popFront();
+        this.pushBack(it->m_pointer->m_data);
+    }
+    if(this->m_size > q.size())
+    {
+        for(Iterator it = this.begin();  it != this->m_size- q.end(); ++it)
+        {
+            this.popFront();
+        }
+    }
+    this->m_size = q.size();
 }
 
 template <typename T>
-Queue<T>::~Queue()
-{
-    while (this->m_head)
+Queue<T>::~Queue()                                   //new: implemented
+{   
+    while(this->m_head != this->m_tail)
     {
         Node<T>* toDelete = this-> m_head;
-        m_head=m_head->m_nextNode;
+        this->m_head=this->m_head->m_nextNode;
         delete toDelete;
     }
-
-    //  delete m_head; //??
-    // delete m_tail; //??
+    delete toDelete;
 }
+
 template <typename T>
 void Queue<T>:: pushBack(const T& data)
 {
     this->m_tail->m_nextNode= new Node<T>();
+    if(this->m_tail->m_nextNode == nullptr)          //new: throw
+    {
+        throw std::bad_alloc();
+    }
     this->m_tail= this->m_tail->m_nextNode;
     this->m_tail->m_data= data;
     ++this->m_size;
@@ -206,30 +246,31 @@ void Queue<T>:: pushBack(const T& data)
 template <typename T>
 T& Queue<T>:: front()
 {
-    if (m_size == 0)
-        // throw
-        return this->m_head->m_nextNode->m_data;
+    if(m_size == INITIAL_SIZE)                       //new: throw
+    {
+        throw Queue<T>::EmptyQueue();
+    }
+    return this->m_head->m_nextNode->m_data;
 }
 
 template <typename T>
 void Queue<T>:: popFront()
 {
-    if(this->m_size == INITIAL_SIZE)
+    if(this->m_size == INITIAL_SIZE)                //new: throw
     {
-        // throw
+        throw Queue<T>::EmptyQueue();
     }
-
-    Node<T>* toDelete = this-> m_head.m_nextNode;
-
-    if (toDelete == this->m_tail)
+    Node<T>* toDelete = this->m_head->m_nextNode;
+    if(toDelete == this->m_tail)
     {
         this->m_tail= this->m_head;
     }
-
-    m_head->m_nextNode= m_head->m_nextNode->m_nextNode;
+    else
+    {
+        m_head->m_nextNode= m_head->m_nextNode->m_nextNode;
+    }
     delete toDelete;
     --this->m_size;
-
 }
 
 template <typename T>
@@ -238,14 +279,13 @@ int Queue<T>:: size() const
     return this->m_size;
 }
 
-
 template <typename T, typename S>
 Queue<T> filter(Queue<T>& q, S func)
 {
     Queue<T> newQueue = q;
-    while(newQueue.size() > INITIAL_SIZE)
+    for(it = q.begin(); it != q.end(); ++it)        //new: iterator
     {
-        if(!(*func(newQueue.front())))
+        if(!*func(newQueue.front()))
         {
             newQueue.popFront();
         }
@@ -256,23 +296,12 @@ Queue<T> filter(Queue<T>& q, S func)
 template <typename T, typename S>
 void transform(Queue<T>& q, S func)
 {
-    int QueueSize = q.size();
-    q.pushBack(q.front());
-    q.popFront();
-    while(QueueSize > INITIAL_SIZE)
+    for(it = q.begin(); it != q.end(); ++it)        //new: iterator
     {
         *func(newQueue.front());
         q.pushBack(q.front());
         q.popFront();
-        --QueueSize;
     }
 }
-
-template <typename T, typename S>
-Iterator Queue<T>::begin()
-{
-    return;
-}
-
 
 #endif

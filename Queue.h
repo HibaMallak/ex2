@@ -18,6 +18,8 @@ private:
 
 public:
     class Iterator;
+    Iterator begin();
+    Iterator end();
     Iterator begin() const;
     Iterator end() const;
     Queue();
@@ -43,7 +45,6 @@ class Queue<T>::Iterator
     public:
         const T& operator*() const;
         Iterator& operator++();
-        bool operator==(const Iterator& it) const;
         bool operator!=(const Iterator& it) const;
         Iterator(const Iterator&) = default;
         Iterator& operator=(const Iterator&) = default;
@@ -71,7 +72,7 @@ const T& Queue<T>::Iterator::operator*() const
 template<typename T>
 bool Queue<T>::Iterator::operator!=(const Iterator& i) const 
 {
-    return !(*this == i);
+    return this->m_index != i.m_index;
 }
 
 
@@ -187,6 +188,11 @@ void transform(Queue<T>& q, S func)
     }
 }
 
+template <typename T, typename S>
+Iterator Queue<T>::begin()
+{
+    return;
+}
 
 
 #endif

@@ -31,6 +31,8 @@ public:
     void popFront();
     int size() const;
 
+    class EmptyQueue{}
+
 };
 
 template<typename T>
@@ -48,6 +50,8 @@ class Queue<T>::Iterator
         bool operator!=(const Iterator& it) const;
         Iterator(const Iterator&) = default;
         Iterator& operator=(const Iterator&) = default;
+
+        class InvalidOperation&{}
 };
 
 template<typename T>
@@ -58,7 +62,10 @@ Queue<T>::Iterator::Iterator(const Queue<T>* queue, int index): m_queue(queue), 
 template<typename T>
 typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
 {
-    //check in boundries
+    if(this->m_queue->m_tail->m_nextNode == nullptr)
+    {
+        throw InvalidOperation();
+    }
     ++index;
     return this*;   
 }
@@ -126,30 +133,28 @@ void Queue<T>:: pushBack(const T& data)
 template <typename T>
 T& Queue<T>:: front()
 {
-    if (m_size == 0)
-        // throw
+    if (m_size == INITIAL_SIZE)
+    {
+        throw Queue<T>::EmptyQueue();
+    }
     return this->m_head->m_nextNode->m_data;
 }
 
 template <typename T>
 void Queue<T>:: popFront()
 {
-    if(this->m_size == INITIAL_SIZE)
+    if (m_size == INITIAL_SIZE)
     {
-        // throw
+        throw Queue<T>::EmptyQueue();
     }
-
     Node<T>* toDelete = this-> m_head.m_nextNode;
-
     if (toDelete == this->m_tail)
     {
         this->m_tail= this->m_head;
     }
-
     m_head->m_nextNode= m_head->m_nextNode->m_nextNode;
     delete toDelete;
     --this->m_size;
-
 }
 
 template <typename T>
@@ -157,7 +162,6 @@ int Queue<T>:: size() const
 {
     return this->m_size;
 }
-
 
 template <typename T, typename S>
 Queue<T> filter(Queue<T>& q, S func)
@@ -188,11 +192,6 @@ void transform(Queue<T>& q, S func)
     }
 }
 
-template <typename T, typename S>
-Iterator Queue<T>::begin()
-{
-    return;
-}
 
 
 #endif

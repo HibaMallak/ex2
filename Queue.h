@@ -31,7 +31,7 @@ public:
     void popFront();
     int size() const;
 
-    class EmptyQueue{}
+    class EmptyQueue{};
 
 };
 
@@ -51,7 +51,7 @@ class Queue<T>::Iterator
         Iterator(const Iterator&) = default;
         Iterator& operator=(const Iterator&) = default;
 
-        class InvalidOperation&{}
+        class InvalidOperation&{};
 };
 
 template<typename T>
@@ -122,7 +122,7 @@ Queue<T>::~Queue()
     // delete m_tail; //??
 }
 template <typename T>
-void Queue<T>:: pushBack(const T& data)
+void Queue<T>::pushBack(const T& data)
 {
     this->m_tail->m_nextNode= new Node<T>();
     this->m_tail= this->m_tail->m_nextNode;

@@ -6,7 +6,7 @@ using std::endl;
 HealthPoints:: HealthPoints(int maxHP) :
 m_maxHealthPoints(maxHP), m_tempHealthPoints(m_maxHealthPoints)
 {
-    if(maxHP<=0)
+    if(maxHP <= MIN_HP)
     {
         throw HealthPoints::InvalidArgument();
     }
@@ -19,12 +19,12 @@ HealthPoints& HealthPoints:: operator+=(const int num)
 
     if (m_tempHealthPoints > m_maxHealthPoints)
     {
-        m_tempHealthPoints=m_maxHealthPoints;
+        m_tempHealthPoints= m_maxHealthPoints;
     }
 
     if (m_tempHealthPoints < MIN_HP)
     {
-        m_tempHealthPoints= MIN_HP;
+        m_tempHealthPoints = MIN_HP;
     }
 
     return *this;

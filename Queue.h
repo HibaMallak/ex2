@@ -1,15 +1,21 @@
 #ifndef EX3_QUEUE_H
 #define EX3_QUEUE_H
 
+static const int INITIAL_SIZE = 0;
+
 template <typename T>
 class Queue
 {
 private:
-    static const int INITIAL_SIZE = 0;
     struct Node
     {
-        T m_data;
-        Node *m_nextNode= nullptr;
+        private:
+            T m_data;
+            Node *m_nextNode= nullptr;
+            Node<T>()=default;
+            Node<T>(const Node<T>& node)=default;
+            Node& operator=(const Node<T>& node)=default;
+            ~Node()=default;
     };
 
     Node *m_head;
@@ -25,7 +31,7 @@ public:
     Queue();
     Queue(const Queue<T> &q);
     ~Queue();
-    Queue& operator=(const Queue& q);
+    Queue& operator=(const Queue<T>& q);
     void pushBack(const T& data);
     T& front();
     void popFront();
@@ -86,7 +92,7 @@ bool Queue<T>::Iterator::operator!=(const Iterator& i) const
 template<typename T>
 Queue<T>::Queue() : m_size(INITIAL_SIZE), m_head(new Node<T>()), m_tail(this->m_head)
 {
-
+    //do we need bad_alloc here??
 }
 
 
@@ -114,7 +120,7 @@ Queue<T>::~Queue()
     while (this->m_head)
     {
         Node<T>* toDelete = this-> m_head;
-        m_head=m_head->m_nextNode;
+        m_head= m_head->m_nextNode;
         delete toDelete;
     }
 
@@ -125,6 +131,10 @@ template <typename T>
 void Queue<T>::pushBack(const T& data)
 {
     this->m_tail->m_nextNode= new Node<T>();
+    if(this->m_tail->m_nextNode == nullptr)
+    {
+        throw std::bad_alloc();
+    }
     this->m_tail= this->m_tail->m_nextNode;
     this->m_tail->m_data= data;
     ++this->m_size;
@@ -191,7 +201,5 @@ void transform(Queue<T>& q, S func)
         --QueueSize;
     }
 }
-
-
 
 #endif

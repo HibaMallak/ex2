@@ -6,6 +6,7 @@ class Queue
 {
 private:
     static const int INITIAL_SIZE = 0;
+    static const bool DIFF = false;
     struct Node<T>
     {
         T m_data;
@@ -29,14 +30,15 @@ public:
     ConstIterator begin() const;
     ConstIterator end() const;
 
-    Queue();
-    Queue(const Queue<T> &q);
+    Queue<T>();
+    Queue<T>(const Queue<T> &q);
     ~Queue();
-    Queue& operator=(const Queue& q);
+    Queue<T>& operator=(const Queue<T>& q);
     void pushBack(const T& data);
     T& front();
     void popFront();
     int size() const;
+    bool operator==(const Queue<T>& q);
 
     class EmptyQueue{};                                   //new
 };
@@ -58,7 +60,7 @@ public:
     Iterator(const Iterator&) = default;
     Iterator& operator=(const Iterator&) = default;
 
-     class InvalidOperation&{};                             //new
+    class InvalidOperation&{};                             //new
 };
 
 
@@ -279,11 +281,27 @@ int Queue<T>:: size() const
     return this->m_size;
 }
 
+bool Queue<T>::operator==(const Queue& q)
+{
+    if(this->m_size != q.size())
+    {
+        return DIFF;
+    }
+    for(Iterator it = q.begin(); it != q.end(); ++it)
+    {
+        if(this.front() != q.front())
+        {
+            return DIFF;
+        }
+    }
+    return !DIFF;
+}
+
 template <typename T, typename S>
 Queue<T> filter(Queue<T>& q, S func)
 {
     Queue<T> newQueue = q;
-    for(it = q.begin(); it != q.end(); ++it)        //new: iterator
+    for(Iterator it = q.begin(); it != q.end(); ++it)        //new: iterator
     {
         if(!*func(newQueue.front()))
         {
@@ -296,7 +314,7 @@ Queue<T> filter(Queue<T>& q, S func)
 template <typename T, typename S>
 void transform(Queue<T>& q, S func)
 {
-    for(it = q.begin(); it != q.end(); ++it)        //new: iterator
+    for(Iterator it = q.begin(); it != q.end(); ++it)        //new: iterator
     {
         *func(newQueue.front());
         q.pushBack(q.front());

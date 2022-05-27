@@ -12,6 +12,21 @@ m_maxHealthPoints(maxHP), m_tempHealthPoints(m_maxHealthPoints)
     }
 }
 
+HealthPoints& HealthPoints::operator=(HealthPoints h)
+{
+    this->m_tempHealthPoints= h.get_m_tempHealthPoints();
+    return *this;
+}
+
+int HealthPoints::get_m_tempHealthPoints() const
+{
+    return this->m_tempHealthPoints;
+}
+
+int HealthPoints::get_m_maxHealthPoints() const
+{
+    return this->m_maxHealthPoints;
+}
 
 HealthPoints& HealthPoints:: operator+=(const int num)
 {
@@ -52,7 +67,7 @@ HealthPoints operator-(const HealthPoints& healthPoints, const int num)
 
  bool operator==(const HealthPoints& first, const HealthPoints& other)
 {
-    return first.m_tempHealthPoints== other.m_tempHealthPoints;
+    return first.get_m_tempHealthPoints()== other.get_m_tempHealthPoints();
 }
 
 bool operator!=(const HealthPoints& first, const HealthPoints& other)
@@ -62,7 +77,7 @@ bool operator!=(const HealthPoints& first, const HealthPoints& other)
 
  bool operator<(const HealthPoints& first, const HealthPoints& other)
 {
-    return (first.m_tempHealthPoints < other.m_tempHealthPoints);
+    return (first.get_m_tempHealthPoints() < other.get_m_tempHealthPoints());
 
 }
 
@@ -81,9 +96,9 @@ bool operator>=(const HealthPoints& first, const HealthPoints& other)
     return other <= first;
 }
 
- std::ostream& operator<<(const HealthPoints& first, std::ostream& os)
+ std::ostream& operator<<(std::ostream& os, const HealthPoints& first)
 {
-    return os << first.m_tempHealthPoints << "(" << first.m_maxHealthPoints << ")";
+    return os << first.get_m_tempHealthPoints() << "(" << first.get_m_maxHealthPoints() << ")" ;
 }
 
 

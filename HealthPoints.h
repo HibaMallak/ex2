@@ -40,14 +40,14 @@ public:
      * @return
      *      default
     */
-    HealthPoints& operator=(HealthPoints& h) =default;
+    HealthPoints& operator=(HealthPoints h);
 
     HealthPoints& operator+=(const int num);
     HealthPoints& operator-=(const int num);
 
     friend bool operator==(const HealthPoints& first, const HealthPoints& other) ;
     friend bool operator<(const HealthPoints& first, const HealthPoints& other) ;
-    friend std::ostream& operator<<(const HealthPoints& first, std::ostream& os) ;
+    friend std::ostream& operator<<(std::ostream& os, const HealthPoints& first) ;
 
 
 
@@ -56,6 +56,9 @@ public:
 private:
     int m_maxHealthPoints;
     int m_tempHealthPoints;
+    int get_m_tempHealthPoints() const;
+    int get_m_maxHealthPoints() const;
+
 
 };
 bool operator!=(const HealthPoints& first, const HealthPoints& other);

@@ -9,7 +9,7 @@ class Queue
 {
 private:
     template <typename S>
-    class Node
+    struct Node
     {
         S m_data;
         Node<S> *m_nextNode= nullptr;
@@ -231,7 +231,7 @@ Queue<T>::~Queue()                                   //new: implemented
     for( typename Queue<T>::ConstIterator it = this->begin(); it != this->end(); ++it)
     {
         Node<T> *toDelete = this->m_head;
-        this->m_head= this->m_head.get_m_nextNode();
+        this->m_head= this->m_head->m_nextNode;
         delete toDelete;
     }
 }
@@ -239,9 +239,9 @@ Queue<T>::~Queue()                                   //new: implemented
 template <typename T>
 void Queue<T>:: pushBack(const T& data)
 {
-    this->m_tail.get_m_nextNode()= new Node<T>();
-    this->m_tail= this->m_tail.get_m_nextNode();
-    this->m_tail.get_m_nextNode().get_m_data()= data;
+    this->m_tail->m_nextNode= new Node<T>();
+    this->m_tail= this->m_tail->m_nextNode;
+    this->m_tail->m_nextNode->m_data=data;
     ++this->m_size;
 }
 
@@ -252,7 +252,7 @@ T& Queue<T>::front()
     {
         throw Queue<T>::EmptyQueue();
     }
-    return this->m_head.get_m_nextNode().get_m_data();
+    return this->m_head->m_nextNode->m_data;
 }
 
 template <typename T>
@@ -262,14 +262,14 @@ void Queue<T>:: popFront()
     {
         throw Queue<T>::EmptyQueue();
     }
-    Queue<T>* toDelete = this->m_head.get_m_nextNode();
+    Node<T>* toDelete = this->m_head->m_nextNode;
     if(toDelete == this->m_tail)
     {
         this->m_tail= this->m_head;
     }
     else
     {
-        this->m_head.get_m_nextNode()= m_head.get_m_nextNode().get_m_nextNode();    //new
+        this->m_head->m_nextNode= m_head->m_nextNode->m_nextNode;    //new
     }
     delete toDelete;
     --this->m_size;
@@ -303,7 +303,7 @@ template <typename T, typename S>
 Queue<T> filter(Queue<T>& q, S func)
 {
     Queue<T> newQueue;
-    for( typename Queue<T>::ConstIterator it = q->begin(); it != q->end(); ++it)
+    for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
         if(func(newQueue->front()))
         {
@@ -323,6 +323,7 @@ void transform(Queue<T>& q, S func)
         *func(q->front());
         q->pushBack(q.front());
         q->popFront();
+
     }
 }
 

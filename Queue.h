@@ -103,7 +103,7 @@ Queue<T>::Iterator::Iterator(Node<T>* pointer): m_pointer(pointer)
 {
 }
 
-template<typename T>
+template<class T>
 typename Queue<T>::Iterator Queue<T>::begin()
 {
     if (this->m_size == INITIAL_SIZE)
@@ -140,7 +140,7 @@ T& Queue<T>::Iterator::operator*() const
 template<typename T>
 bool Queue<T>::Iterator::operator!=(const Iterator& i) const
 {
-    return this->m_pointer!= (*i).get_m_pointer();
+    return this->m_pointer != i.get_m_pointer();
 }
 
 template<typename T>
@@ -158,7 +158,7 @@ Queue<T>::ConstIterator::ConstIterator(const Iterator& it): m_pointer(it.get_m_p
 template<typename T>
 typename Queue<T>::ConstIterator Queue<T>::begin() const
 {
-    if (this->m_size == INITIAL_SIZE)                              //new: throw
+    if (this->m_size == INITIAL_SIZE)                          //new: throw
     {
         throw Queue<T>::EmptyQueue();
     }
@@ -191,7 +191,7 @@ const T& Queue<T>::ConstIterator::operator*() const
 template<typename T>
 bool Queue<T>::ConstIterator::operator!=(const ConstIterator& i) const
 {
-    return this->m_pointer!= (*i).get_m_pointer();                      //new: changed i.pointer to i->pointer
+    return this->m_pointer!= (*i).get_m_pointer();
 }
 
 

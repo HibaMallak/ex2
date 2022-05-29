@@ -201,7 +201,7 @@ Queue<T>::Queue(const Queue<T>& q)
     {
         this.pushBack(it.get_m_pointer().get_m_data());         //??
     }
-    this->m_size = qsize();
+    this->m_size = q->size();
 }
 
 template <typename T>
@@ -217,7 +217,7 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q)             //new: implemented
         this->popFront();
     }
 
-    for(it = q->begin();  it!= q->end(); ++it)              //changed to constiterator
+    for( typename Queue<T>::ConstIterator it = this->begin(); it != this->end(); ++it)
     {
         this.pushBack(q->begin());
         q->popFront();

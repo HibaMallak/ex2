@@ -305,9 +305,9 @@ Queue<T> filter(Queue<T>& q, S func)
     Queue<T> newQueue;
     for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
-        if(func(newQueue->front()))
+        if(func(newQueue.front()))
         {
-            newQueue->pushBack(it);
+            newQueue.pushBack(it->m_data);
         }
 
     }
@@ -315,7 +315,7 @@ Queue<T> filter(Queue<T>& q, S func)
 }
 
 template <typename T, typename S>
-void transform(Queue<T>& q, S func)
+void transform( Queue<T>& q, S func)
 {
     //Queue<T> q1=q;                    //new: implemented
     while (q->size()>0)    //new: iterator

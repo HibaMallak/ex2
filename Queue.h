@@ -37,12 +37,13 @@ public:
     ~Queue();
     Queue& operator=(const Queue<T>& q);
     void pushBack(const T& data);
-    T& front();
+    T& front() ;
+    const T& front() const;
     void popFront();
     int size() const;
-    bool operator==(const Queue<T>& q);                 //are we allowed to add?
+    //bool operator==(const Queue<T>& q);                 //are we allowed to add?
 
-    class EmptyQueue {};                                   //new
+    class EmptyQueue {};
 };
 
 
@@ -53,16 +54,15 @@ private:
     Queue<T>::Node<T> * m_pointer;
 
 public:
-    //Iterator();
 
 
-    Iterator(Node<T>* pointer);
+    Iterator(Node<T>* pointer); //private??
+    Iterator(const Iterator&) = default; //private??
     T& operator*() const;
     Iterator& operator++();
     bool operator!=(const Iterator& it) const;
-    Iterator(const Iterator&) = default;
     Iterator& operator=(const Iterator&) = default;
-    ~Iterator()= default; //? s
+    ~Iterator()= default;
 
     class InvalidOperation{};                             //new
 };
@@ -75,30 +75,21 @@ private:
 
     Node<T>* m_pointer;
 
+
 public:
 
-    // ConstIterator();
-
     ConstIterator(Node<T>* pointer);
-    ConstIterator(const Iterator& it);
+   // ConstIterator(const Iterator& it); no need
     const T& operator*() const;
     ConstIterator& operator++();
     bool operator!=(const ConstIterator& it) const;
     ConstIterator(const ConstIterator&) = default;
     ConstIterator& operator=(const ConstIterator&) = default;
+    ~ConstIterator()= default;
 
     class InvalidOperation {};
 };
 
-/*template<typename T>
-Queue<T>::Iterator::Iterator(): m_pointer(nullptr)
-{
-}
-template<typename T>
-Queue<T>::ConstIterator::ConstIterator(): m_pointer(nullptr)
-{
-}
-*/
 
 template<typename T>
 Queue<T>::Iterator::Iterator(Node<T>* pointer): m_pointer(pointer)
@@ -108,10 +99,10 @@ Queue<T>::Iterator::Iterator(Node<T>* pointer): m_pointer(pointer)
 template<class T>
 typename Queue<T>::Iterator Queue<T>::begin()
 {
-    //if (this->m_size == INITIAL_SIZE)
-//    {
-  //      throw Queue<T>::EmptyQueue();
-    //}
+    if (this->m_size == INITIAL_SIZE)
+    {
+        return Iterator(nullptr);
+    }
     return Iterator(this->m_head->m_nextNode);
 
 }
@@ -126,7 +117,7 @@ template<typename T>
 typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
 {
 
-    if(this->m_pointer == nullptr)               //always entering if, why??
+    if(this->m_pointer == nullptr)
     {
         throw Queue<T>::Iterator::InvalidOperation();
     }
@@ -154,12 +145,12 @@ Queue<T>::ConstIterator::ConstIterator(Node<T>* pointer): m_pointer(pointer)
 
 }
 
-template<typename T>
-Queue<T>::ConstIterator::ConstIterator(const Iterator& it): m_pointer(it->m_pointer)  //something is not right here
+//template<typename T>
+//Queue<T>::ConstIterator::ConstIterator(const Iterator& it): m_pointer(it->m_pointer)  //something is not right here
 //m_pointer(it->m_pointer)
-{
-
-}
+//{
+ //no need
+//}
 
 
 template<typename T>
@@ -167,8 +158,9 @@ typename Queue<T>::ConstIterator Queue<T>::begin() const
 {
     if (this->m_size == INITIAL_SIZE)
     {
-        throw Queue<T>::EmptyQueue();
+        return ConstIterator(nullptr);
     }
+
     return ConstIterator(this->m_head->m_nextNode);
 }
 
@@ -181,7 +173,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const
 template<typename T>
 typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++()
 {
-    if(this->m_pointer == nullptr)                        //always entering if, why??
+    if(this->m_pointer == nullptr)
     {
         throw Queue<T>::ConstIterator::InvalidOperation();
     }
@@ -222,20 +214,13 @@ Queue<T>::Queue(const Queue<T>& q)
 
     for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
-        try
-        {
             this->pushBack(*it);
-        }
-        catch(const std::bad_alloc& e)
-        {
-            throw e;
-        }
     }
 
 }
 
 template <typename T>
-Queue<T>& Queue<T>::operator=(const Queue<T>& q)
+Queue<T>& Queue<T>::operator=(const Queue<T>& q) //change all!!!!!!
 {
     if(this == &q)
     {
@@ -251,23 +236,16 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q)
 
     for( typename Queue<T>::Iterator it = newQueue.begin(); it != newQueue.end(); ++it)
     {
-        try
-        {
             this->pushBack(newQueue.front());
-        }
-        catch(const std::bad_alloc& e)
-        {
-            throw e;
-        }
-
-        newQueue.popFront();
+            newQueue.popFront();
     }
-    delete newQueue; //??
+
+    return *this;
 }
 
 
 template <typename T>
-Queue<T>::~Queue()                                   //new: implemented
+Queue<T>::~Queue()
 {
     for(int size = this->m_size; size >= INITIAL_SIZE; size--)
     {
@@ -292,7 +270,17 @@ void Queue<T>:: pushBack(const T& data)
 }
 
 template <typename T>
-T& Queue<T>::front()
+const T& Queue<T>::front() const
+{
+    if(this->m_size == INITIAL_SIZE)
+    {
+        throw Queue<T>::EmptyQueue();
+    }
+    return this->m_head->m_nextNode->m_data;
+}
+
+template <typename T>
+ T& Queue<T>::front()
 {
     if(this->m_size == INITIAL_SIZE)
     {
@@ -327,8 +315,8 @@ int Queue<T>:: size() const
     return this->m_size;
 }
 
-template <typename T>                              //do not know if it is possible to add
-bool Queue<T>::operator==(const Queue<T>& q)    //errortype??
+/*template <typename T>
+bool Queue<T>::operator==(const Queue<T>& q)
 {
     if(this->m_size != q.size())
     {
@@ -350,7 +338,7 @@ bool Queue<T>::operator==(const Queue<T>& q)    //errortype??
     }
 
     return IDENTICAL;
-}
+}*/
 
 template <typename T, typename S>
 Queue<T> filter(const Queue<T>& q, S func)

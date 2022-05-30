@@ -55,8 +55,8 @@ public:
 
 private:
     int m_maxHealthPoints;
-    int m_tempHealthPoints;
-    int get_m_tempHealthPoints() const;
+    int m_cuurentHP;
+    int get_m_currentHP() const;
     int get_m_maxHealthPoints() const;
 
 
@@ -72,4 +72,3 @@ HealthPoints operator-(const HealthPoints& healthPoints, const int num);
 
 
 #endif //UNTITLED1_HEALTHPOINTS_H
-

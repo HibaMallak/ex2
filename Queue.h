@@ -50,7 +50,7 @@ template<typename T>
 class Queue<T>::Iterator
 {
 private:
-    Queue<T>::Node<T>* m_pointer;
+    Queue<T>::Node<T> * m_pointer;
 
 public:
     //Iterator();
@@ -108,10 +108,10 @@ Queue<T>::Iterator::Iterator(Node<T>* pointer): m_pointer(pointer)
 template<class T>
 typename Queue<T>::Iterator Queue<T>::begin()
 {
-    if (this->m_size == INITIAL_SIZE)
-    {
-        throw Queue<T>::EmptyQueue();
-    }
+    //if (this->m_size == INITIAL_SIZE)
+//    {
+  //      throw Queue<T>::EmptyQueue();
+    //}
     return Iterator(this->m_head->m_nextNode);
 
 }
@@ -126,7 +126,7 @@ template<typename T>
 typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
 {
 
-    if(this->m_pointer->m_nextNode == nullptr)               //always entering if, why??
+    if(this->m_pointer == nullptr)               //always entering if, why??
     {
         throw Queue<T>::Iterator::InvalidOperation();
     }
@@ -161,6 +161,7 @@ Queue<T>::ConstIterator::ConstIterator(const Iterator& it): m_pointer(it->m_poin
 
 }
 
+
 template<typename T>
 typename Queue<T>::ConstIterator Queue<T>::begin() const
 {
@@ -180,7 +181,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const
 template<typename T>
 typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++()
 {
-    if(this->m_pointer->m_nextNode == nullptr)                        //always entering if, why??
+    if(this->m_pointer == nullptr)                        //always entering if, why??
     {
         throw Queue<T>::ConstIterator::InvalidOperation();
     }
@@ -354,9 +355,9 @@ bool Queue<T>::operator==(const Queue<T>& q)    //errortype??
 template <typename T, typename S>
 Queue<T> filter(const Queue<T>& q, S func)
 {
-    Queue<T> newQueue= q;
+    Queue<T> newQueue;
 
-    for( typename Queue<T>::Iterator it = newQueue.begin(); it != newQueue.end(); ++it)
+    for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
         if(func(*it))
         {
@@ -364,15 +365,6 @@ Queue<T> filter(const Queue<T>& q, S func)
         }
 
     }
-    /*
-   for(int size=q.size();size>= INITIAL_SIZE; --size)
-   {
-       if(func(newQueue.front()))
-       {
-           newQueue.pushBack(newQueue.front());
-       }
-       newQueue.popFront();
-   }*/
     return newQueue;
 }
 

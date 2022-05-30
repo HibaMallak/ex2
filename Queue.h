@@ -1,7 +1,7 @@
 //hello!
 #ifndef EX2_QUEUE_H
 #define EX2_QUEUE_H
-
+#include <stdexcept>
 
 static const int INITIAL_SIZE = 0;
 static const bool DIFF = false;
@@ -192,15 +192,26 @@ Queue<T>::Queue() : m_head(new Node<T>()), m_tail(this->m_head), m_size(INITIAL_
 template <typename T>
 Queue<T>::Queue(const Queue<T>& q)
 {
+    if(q.m_head == nullptr)
+    {
+        return;
+    }
     this->m_head= new Node<T>();
     this->m_tail= this->m_head;
-    int size= q.size();
-    //for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)      //could be this or that
-    for( typename Queue<T>::ConstIterator it = q.begin(); size>INITIAL_SIZE; ++it, --size)
+
+    for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
-        this->pushBack(*it);
+        try
+        {
+            this->pushBack(*it);
+        }
+        catch(const std::bad_alloc& e)
+        {
+            this->~Queue();
+            throw e;
+        }
     }
-    this->m_size = q.size();
+    //this->m_size = q.size(); //pushback does it
 }
 
 template <typename T>
@@ -212,15 +223,11 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q)
     }
 
     Queue<T> newQueue=q;
-    int size1= q.size();
-    int size2= size1;
-    //for( typename Queue<T>::ConstIterator it = this->begin(); it != this->end(); ++it)
-    for( typename Queue<T>::ConstIterator it = this->begin(); size1> INITIAL_SIZE; ++it, --size1)
+    for( typename Queue<T>::Iterator it = this->begin(); it != this->end(); ++it)
     {
         this->popFront();
     }
-    //for( typename Queue<T>::ConstIterator it = newQueue.begin(); it != newQueue.end(); ++it)
-    for( typename Queue<T>::ConstIterator it = newQueue.begin(); size2> INITIAL_SIZE; ++it, --size2)
+    for( typename Queue<T>::Iterator it = newQueue.begin(); it != newQueue.end(); ++it)
     {
         this->pushBack(newQueue.front());
         newQueue.popFront();
@@ -311,12 +318,12 @@ template <typename T, typename S>
 Queue<T> filter(const Queue<T>& q, S func)
 {
     Queue<T> newQueue= q;
-    //for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
-    for( T item : q)
+    //    for( T item : q)
+    for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
-        if(func(item))
+        if(func(*it))
         {
-            newQueue.pushBack(item);
+            newQueue.pushBack(*it);
         }
 
     }
@@ -335,9 +342,7 @@ Queue<T> filter(const Queue<T>& q, S func)
 template <typename T, typename S>
 void transform(Queue<T>& q, S func)             //not good
 {
-    int size = q.size();
-    //for( typename Queue<T>::Iterator it = q.begin(); it != q.end(); ++it)
-    for( typename Queue<T>::Iterator it = q.begin(); size>= INITIAL_SIZE; ++it, --size)
+    for( typename Queue<T>::Iterator it = q.begin(); it != q.end(); ++it)
     {
         func(*it);
     }

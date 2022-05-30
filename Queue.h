@@ -225,7 +225,7 @@ Queue<T>::Queue(const Queue<T>& q)
         }
         catch(std::bad_alloc& e)
         {
-            while(this->m_size >= INITIAL_SIZE)
+            while(this->m_size > INITIAL_SIZE) //maybe with =?
             {
                 this->popFront();
             }
@@ -386,13 +386,19 @@ Queue<T> filter(const Queue<T>& q, S func)
 {
     Queue<T> newQueue;
 
-    for( typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
+    for(typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
         if(func(*it))
         {
-            newQueue.pushBack(*it);
+            try
+            {
+                newQueue.pushBack(*it);
+            }
+            catch(std::bad_alloc& e)
+            {
+                throw e;
+            }
         }
-
     }
     return newQueue;
 }

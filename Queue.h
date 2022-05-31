@@ -2,6 +2,7 @@
 #ifndef EX2_QUEUE_H
 #define EX2_QUEUE_H
 #include <new>
+#include <assert.h>
 
 static const int INITIAL_SIZE = 0;
 //static const bool DIFF = false;
@@ -208,7 +209,7 @@ Queue<T>::Queue() : m_head(new Node<T>()), m_tail(this->m_head), m_size(INITIAL_
 template <typename T>
 Queue<T>::Queue(const Queue<T>& q)
 {
-    if(q.m_head->m_nextNode == nullptr)
+    if(q.size() == INITIAL_SIZE)
     {
         throw Queue<T>::EmptyQueue();
     }
@@ -238,13 +239,11 @@ Queue<T>::Queue(const Queue<T>& q)
             delete this->m_head;
             throw e;
         }
-        
     }
-
 }
 
 template <typename T>
-Queue<T>& Queue<T>::operator=(const Queue<T>& q) //change all!!!!!!
+Queue<T>& Queue<T>::operator=(const Queue<T>& q)
 {
     if(this == &q)
     {
@@ -260,12 +259,13 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q) //change all!!!!!!
         }
         catch(const std::bad_alloc& e)
         {
-            while(dummyNode->m_nextNode != nullptr)
+            while(dummyNode != nullptr)
             {
                 Node<T>* toDelete = dummyNode;
                 dummyNode = dummyNode->m_nextNode;
                 delete toDelete;
             }
+            //delete temp;
             throw e;
             return *this;
         }
@@ -276,8 +276,9 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q) //change all!!!!!!
     {
         this->popFront();
     }
-    this->m_head = dummyNode;
+    this->m_head->m_nextNode = dummyNode->m_nextNode;
     this->m_tail = temp;
+    delete dummyNode;
     this->m_size = q.size();
     return *this;
 }
@@ -311,11 +312,24 @@ Queue<T>::~Queue()
         }
         delete toDelete;
     }*/
-    while(this->m_size > INITIAL_SIZE)
+    /*
+    Node<T> *temp = m_head;
+    if (m_size == INITIAL_SIZE)
+        throw EmptyQueue();
+    while(temp)
+    {
+        Node<T>* toDelete = temp;
+        temp = temp->m_nextNode;
+        delete toDelete;
+        //this->popFront();
+    }
+    */
+    while( this->m_size >INITIAL_SIZE)
     {
         this->popFront();
     }
     delete this->m_head;
+
 
 }
 
@@ -347,7 +361,7 @@ const T& Queue<T>::front() const
 template <typename T>
  T& Queue<T>::front()
 {
-    //if(this->m_head == this->m_tail)
+    //if(this->m_head->m_nextNode == nullptr)
     if(this->m_size == INITIAL_SIZE)
     {
         throw Queue<T>::EmptyQueue();
@@ -362,6 +376,8 @@ void Queue<T>:: popFront()
     {
         throw Queue<T>::EmptyQueue();
     }
+    //if(this->m_head->m_nextNode == nullptr)
+      //  throw EmptyQueue();
     Node<T>* toDelete = this->m_head->m_nextNode;
     if(toDelete == this->m_tail)
     {
@@ -369,7 +385,7 @@ void Queue<T>:: popFront()
     }
     else
     {
-        this->m_head->m_nextNode= this->m_head->m_nextNode->m_nextNode;
+        this->m_head->m_nextNode= toDelete->m_nextNode;
     }
     delete toDelete;
     --this->m_size;
@@ -425,12 +441,12 @@ Queue<T> filter(const Queue<T>& q, S func)
             }
             catch(std::bad_alloc& e)
             {
-                /*
+               /* 
                 while(newQueue.size() > INITIAL_SIZE)
                 {
                     newQueue.popFront();
-                }
-               // delete newQueue.m_head;*/ //~Queue
+                }*/
+                //q.~Queue();
                 throw e;
             }
         }

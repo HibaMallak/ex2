@@ -1,12 +1,11 @@
 //hello!
 #ifndef EX2_QUEUE_H
 #define EX2_QUEUE_H
-#include <stdexcept>
 #include <new>
 
 static const int INITIAL_SIZE = 0;
-static const bool DIFF = false;
-static const bool IDENTICAL = true;
+//static const bool DIFF = false;
+//static const bool IDENTICAL = true;
 
 template <typename T>
 class Queue
@@ -16,7 +15,7 @@ private:
     struct Node
     {
             S m_data;
-            Node *m_nextNode= nullptr;
+            Node *m_nextNode = nullptr;
             Node()= default;
             Node(const Node& n) = default;
             Node& operator=(const Node& n)=default;
@@ -201,7 +200,7 @@ bool Queue<T>::ConstIterator::operator!=(const ConstIterator& i) const
 
 
 template<typename T>
-Queue<T>::Queue() : m_head(new Node<T>()), m_tail(this->m_head), m_size(INITIAL_SIZE)
+Queue<T>::Queue() : m_head(new Node<T>()), m_tail(this->m_head), m_size(INITIAL_SIZE) ///// in 191 test
 {
 
 }
@@ -209,11 +208,18 @@ Queue<T>::Queue() : m_head(new Node<T>()), m_tail(this->m_head), m_size(INITIAL_
 template <typename T>
 Queue<T>::Queue(const Queue<T>& q)
 {
-    if(q.m_head == nullptr)
+    if(q.m_head->m_nextNode == nullptr)
     {
-        return;
+        throw Queue<T>::EmptyQueue();
     }
-    this->m_head= new Node<T>();
+    try
+    {
+        this->m_head= new Node<T>(); /////////////////////// 366 in tests
+    }
+    catch(const std::bad_alloc& e)
+    {
+        throw e;
+    }
     this->m_tail= this->m_head;
     this->m_size = INITIAL_SIZE;
 
@@ -223,12 +229,13 @@ Queue<T>::Queue(const Queue<T>& q)
         {
             this->pushBack(*it);
         }
-        catch(std::bad_alloc& e)
+        catch(const std::bad_alloc& e)
         {
             while(this->m_size > INITIAL_SIZE) //maybe with =?
             {
                 this->popFront();
             }
+            delete this->m_head;
             throw e;
         }
         
@@ -247,11 +254,25 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q) //change all!!!!!!
     Node<T>* temp = dummyNode;
     for(typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
     {
-        temp->m_nextNode = new Node<T>();
+        try
+        {
+            temp->m_nextNode = new Node<T>(); //////////////////////////// 300 in tests
+        }
+        catch(const std::bad_alloc& e)
+        {
+            while(dummyNode->m_nextNode != nullptr)
+            {
+                Node<T>* toDelete = dummyNode;
+                dummyNode = dummyNode->m_nextNode;
+                delete toDelete;
+            }
+            throw e;
+            return *this;
+        }
         temp = temp->m_nextNode;
         temp->m_data = *it;
     }
-    while(q.size()>=INITIAL_SIZE)
+    while(this->m_size > INITIAL_SIZE)
     {
         this->popFront();
     }
@@ -279,7 +300,7 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q) //change all!!!!!!
 
 template <typename T>
 Queue<T>::~Queue()
-{
+{/*
     for(int size = this->m_size; size >= INITIAL_SIZE; size--)
     {
         Node<T> *toDelete = this->m_head;
@@ -289,13 +310,18 @@ Queue<T>::~Queue()
             this->m_head= this->m_head->m_nextNode;
         }
         delete toDelete;
+    }*/
+    while(this->m_size > INITIAL_SIZE)
+    {
+        this->popFront();
     }
+    delete this->m_head;
 
 }
 
 template <typename T>
 void Queue<T>:: pushBack(const T& data)
-{
+{   
     this->m_tail->m_nextNode= new Node<T>();
     this->m_tail= this->m_tail->m_nextNode;
     this->m_tail->m_data= data;
@@ -321,7 +347,6 @@ const T& Queue<T>::front() const
 template <typename T>
  T& Queue<T>::front()
 {
-    //if(this->m_size == INITIAL_SIZE)
     //if(this->m_head == this->m_tail)
     if(this->m_size == INITIAL_SIZE)
     {
@@ -384,6 +409,10 @@ bool Queue<T>::operator==(const Queue<T>& q)
 template <typename T, typename S>
 Queue<T> filter(const Queue<T>& q, S func)
 {
+    if(q.size() <= INITIAL_SIZE)
+    {
+        return q;
+    }
     Queue<T> newQueue;
 
     for(typename Queue<T>::ConstIterator it = q.begin(); it != q.end(); ++it)
@@ -396,6 +425,12 @@ Queue<T> filter(const Queue<T>& q, S func)
             }
             catch(std::bad_alloc& e)
             {
+                /*
+                while(newQueue.size() > INITIAL_SIZE)
+                {
+                    newQueue.popFront();
+                }
+               // delete newQueue.m_head;*/ //~Queue
                 throw e;
             }
         }

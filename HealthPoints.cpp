@@ -39,7 +39,7 @@ HealthPoints& HealthPoints:: operator+=(const int num)
 
     if (m_cuurentHP > m_maxHealthPoints)
     {
-        m_cuurentHP= m_maxHealthPoints;
+        m_cuurentHP = m_maxHealthPoints;
     }
 
     if (m_cuurentHP < MIN_HP)
@@ -103,7 +103,7 @@ bool operator>=(const HealthPoints& first, const HealthPoints& other)
 
 std::ostream& operator<<(std::ostream& os, const HealthPoints& first)
 {
-    return os << first.get_m_currentHP() << "(" << first.get_m_maxHealthPoints() << ")" ;
+    return os << first.get_m_currentHP() << "(" << first.get_m_maxHealthPoints() << ")"  ;
 }
 
 

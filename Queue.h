@@ -4,20 +4,57 @@
 
 static const int INITIAL_SIZE = 0;
 
-///write that we have dummy...?? so then המימוש של העתקה והשמה ברור
 template <typename T>
 class Queue
 {
 private:
+
+    /*
+     * This class of Queue is implemented using a list of Nodes.
+     * The first Node of the list is a dummy Node, 
+     * means the first element of the Queue is at the second Node of the list.
+    */
     template <typename S>
     struct Node
     {
-            S m_data;
-            Node *m_nextNode = nullptr;
-            Node() = default;
-            Node(const Node& n) = default;
-            Node& operator=(const Node& n) = default;
-            ~Node() = default;
+        S m_data;
+        Node *m_nextNode = nullptr;
+
+        /*
+         * C'tor of Node
+         *
+         * @return
+         *      A new empty instance of Node.
+        */
+        Node() = default;
+
+        /*
+         * Copy c'tor of Node
+         *
+         * @param n - A reference of an existing Node.
+         * @return
+         *      A copied instance of n.
+        */
+        Node(const Node& n) = default;
+
+
+        /*
+         * Assignment operator
+         *
+         * @param n - The Node to assign from.
+         * @return
+         *      default
+        */
+        Node& operator=(const Node& n) = default;
+
+
+        /* 
+         * D'tor of Queue class
+         *
+         * @return
+         *      Deletes this instance of Queue.
+        */
+        ~Node() = default;
     };
 
     Node<T> *m_head;
@@ -25,43 +62,6 @@ private:
     int m_size;
 
 public:
-    class Iterator;
-
-    /*
-     * Returns an Iterator of the first element of Queue.
-     *
-     * @return
-     *      An Iterator of the first element of Queue.
-    */
-    Iterator begin();
-
-
-    /*
-     * Returns an Iterator to after the last element of Queue.
-     *
-     * @return
-     *      An Iterator to after the last element of Queue.
-    */
-    Iterator end();
-
-    class ConstIterator;
-
-    /*
-     * Returns a const Iterator of the first element of Queue.
-     *
-     * @return
-     *      A const Iterator of the first element of Queue.
-    */
-    ConstIterator begin() const;
-
-
-    /*
-     * Returns a const Iterator to after the last element of Queue.
-     *
-     * @return
-     *      A const Iterator to after the last element of Queue.
-    */
-    ConstIterator end() const;
     
     /*
      * C'tor of Queue class
@@ -147,6 +147,46 @@ public:
     int size() const;
 
 
+    class Iterator;
+    /*
+     * Returns an Iterator of the first element of Queue.
+     *
+     * @return
+     *      An Iterator of the first element of Queue.
+    */
+    Iterator begin();
+
+    /*
+     * Returns an Iterator to after the last element of Queue.
+     *
+     * @return
+     *      An Iterator to after the last element of Queue.
+    */
+    Iterator end();
+
+
+    class ConstIterator;
+    /*
+     * Returns a const Iterator of the first element of Queue.
+     *
+     * @return
+     *      A const Iterator of the first element of Queue.
+    */
+    ConstIterator begin() const;
+
+    /*
+     * Returns a const Iterator to after the last element of Queue.
+     *
+     * @return
+     *      A const Iterator to after the last element of Queue.
+    */
+    ConstIterator end() const;
+
+    /* 
+     * This exception will be thrown 
+     * if there is an attempt to perform an operation on an empty Queue, 
+     * when it is considered illegal.
+    */
     class EmptyQueue {};
 };
 
@@ -155,7 +195,9 @@ template<typename T>
 class Queue<T>::Iterator
 {
 private:
+
     Queue<T>::Node<T> * m_pointer;
+
     friend class Queue<T>;
 
 public:
@@ -167,8 +209,7 @@ public:
      * @return
      *      A new Iterator.
     */
-    Iterator(Node<T>* pointer); //private??
-
+    Iterator(Node<T>* pointer);
 
     /*
      * Copy c'tor of Iterator class
@@ -177,8 +218,7 @@ public:
      * @return
      *      A copied Iterator.
     */
-    Iterator(const Iterator& i) = default; //private??
-
+    Iterator(const Iterator& i) = default; 
 
     /*
      * D'tor of Iterator class
@@ -227,6 +267,11 @@ public:
      */
     bool operator!=(const Iterator& i) const;
 
+    /* 
+     * This exception will be thrown 
+     * if there is an attempt to perform an operation on an Iterator, 
+     * when it is considered illegal.
+    */
     class InvalidOperation{};
 };
 
@@ -237,73 +282,78 @@ class Queue<T>::ConstIterator
 private:
 
     Node<T>* m_pointer;
+
     friend class Queue<T>;
 
 public:
 
     /*
-     * C'tor of Iterator class
+     * C'tor of const Iterator class
      *
-     * @param pointer - the node that the Iterator points to.
+     * @param pointer - the node that the const Iterator points to.
      * @return
-     *      A new Iterator.
+     *      A new const Iterator.
     */
-    ConstIterator(Node<T>* pointer);
+    ConstIterator(Node<T>* pointer); 
 
     /*
-     * Copy c'tor of Iterator class
+     * Copy c'tor of const Iterator class
      *
-     * @param i - The Iterator to copy construct from.
+     * @param i - The const Iterator to copy construct from.
      * @return
-     *      A copied Iterator.
+     *      A copied const Iterator.
     */
-    ConstIterator(const ConstIterator& i) = default;
-    
+    ConstIterator(const ConstIterator& i) = default;  
 
     /*
-     * D'tor of Iterator class
+     * D'tor of const Iterator class
      *
      * @return
-     *      Deletes this Iterator.
+     *      Deletes this const Iterator.
     */
     ~ConstIterator() = default;
 
     /*
      * Assignment operator
      *
-     * @param it - The Iterator to assign from.
+     * @param it - The const Iterator to assign from.
      * @return  
      *      default
     */
     ConstIterator& operator=(const ConstIterator& i) = default;
 
     /*
-     * Returns a reference data which the Iterator points to.
+     * Returns a reference data which the const Iterator points to.
      *
      * @return
-     *      A reference to the data which the Iterator points to.
+     *      A reference to the data which the const Iterator points to.
     */
     const T& operator*() const;
 
     /*
-     * Sets the Iterator to point to the next node of the one it points to, 
-     * and then returns a reference to the updated Iterator.
+     * Sets the const Iterator to point to the next node of the one it points to, 
+     * and then returns a reference to the updated const Iterator.
      *
      * @return
-     *      A reference to the next node of the one this Iterator points to.
+     *      A reference to the next node of the one this const Iterator points to.
     */
     ConstIterator& operator++();
 
     /*
-     * Check if this Iterator points to the same node as i.
+     * Check if this const Iterator points to the same node as i.
      *
-     * @param i - The Iterator to compare with.
+     * @param i - The const Iterator to compare with.
      * @return
-     *          True if this Iterator does not point to the same node as i.
+     *          True if this const Iterator does not point to the same node as i.
      *          False otherwise
      */
     bool operator!=(const ConstIterator& i) const;
 
+    /* 
+     * This exception will be thrown 
+     * if there is an attempt to perform an operation on a const Iterator, 
+     * when it is considered illegal.
+    */
     class InvalidOperation {};
 };
 
@@ -549,7 +599,15 @@ int Queue<T>::size() const
     return this->m_size;
 }
 
-
+/*
+ * Filters a given queue according to a given condition.
+ *
+ * @param q - A Queue to filter.
+ * @param func - A function to filter the Queue according to.
+ * 
+ * @return
+ *      A filtered instance of q.
+*/
 template <typename T, typename S>
 Queue<T> filter(const Queue<T>& q, S func)
 {
@@ -576,7 +634,15 @@ Queue<T> filter(const Queue<T>& q, S func)
     return newQueue;
 }
 
-
+/*
+ * Apply a transform on a given Queue according to a given way.
+ *
+ * @param q - A Queue to transform.
+ * @param func - A function which apply a transform on a given value.
+ * 
+ * @return
+ *      void
+*/
 template <typename T, typename S>
 void transform(Queue<T>& q, S func)
 {

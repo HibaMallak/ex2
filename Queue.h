@@ -2,6 +2,7 @@
 #define EX3_QUEUE_H
 #include <new>
 
+// In the constructor, m_size initializes to zero.
 static const int INITIAL_SIZE = 0;
 
 template <typename T>
@@ -11,8 +12,9 @@ private:
 
     /*
      * This class of Queue is implemented using a list of Nodes.
-     * The first Node of the list is a dummy Node, 
+     * The first Node of the list is a dummy Node,
      * means the first element of the Queue is at the second Node of the list.
+     * when having just the dummy Node, m_size initializes to zero.
     */
     template <typename S>
     struct Node
@@ -48,11 +50,11 @@ private:
         Node& operator=(const Node& n) = default;
 
 
-        /* 
-         * D'tor of Queue class
+        /*
+         * D'tor of Node class
          *
          * @return
-         *      Deletes this instance of Queue.
+         *      default.
         */
         ~Node() = default;
     };
@@ -62,7 +64,7 @@ private:
     int m_size;
 
 public:
-    
+
     /*
      * C'tor of Queue class
      *
@@ -82,7 +84,7 @@ public:
     Queue(const Queue<T> &q);
 
 
-    /* 
+    /*
      * D'tor of Queue class
      *
      * @return
@@ -122,9 +124,9 @@ public:
 
     /*
      * Returns the data of the first element of the Queue when Queue is const.
-     * 
+     *
      * @return
-     *      A reference to the data of the first element of the Queue.
+     *      A const reference to the data of the first element of the Queue.
     */
     const T& front() const;
 
@@ -148,6 +150,8 @@ public:
 
 
     class Iterator;
+
+
     /*
      * Returns an Iterator of the first element of Queue.
      *
@@ -182,9 +186,9 @@ public:
     */
     ConstIterator end() const;
 
-    /* 
-     * This exception will be thrown 
-     * if there is an attempt to perform an operation on an empty Queue, 
+    /*
+     * This exception will be thrown
+     * if there is an attempt to perform an operation on an empty Queue,
      * when it is considered illegal.
     */
     class EmptyQueue {};
@@ -218,7 +222,7 @@ public:
      * @return
      *      A copied Iterator.
     */
-    Iterator(const Iterator& i) = default; 
+    Iterator(const Iterator& i) = default;
 
     /*
      * D'tor of Iterator class
@@ -233,7 +237,7 @@ public:
      * Assignment operator
      *
      * @param i - The Iterator to assign from.
-     * @return  
+     * @return
      *      default
     */
     Iterator& operator=(const Iterator& i) = default;
@@ -249,7 +253,7 @@ public:
 
 
     /*
-     * Sets the Iterator to point to the next node of the one it points to, 
+     * Sets the Iterator to point to the next node of the one it points to,
      * and then returns a reference to the updated Iterator.
      *
      * @return
@@ -267,9 +271,9 @@ public:
      */
     bool operator!=(const Iterator& i) const;
 
-    /* 
-     * This exception will be thrown 
-     * if there is an attempt to perform an operation on an Iterator, 
+    /*
+     * This exception will be thrown
+     * if there is an attempt to perform an operation on an Iterator,
      * when it is considered illegal.
     */
     class InvalidOperation{};
@@ -294,7 +298,7 @@ public:
      * @return
      *      A new const Iterator.
     */
-    ConstIterator(Node<T>* pointer); 
+    ConstIterator(Node<T>* pointer);
 
     /*
      * Copy c'tor of const Iterator class
@@ -303,7 +307,7 @@ public:
      * @return
      *      A copied const Iterator.
     */
-    ConstIterator(const ConstIterator& i) = default;  
+    ConstIterator(const ConstIterator& i) = default;
 
     /*
      * D'tor of const Iterator class
@@ -317,7 +321,7 @@ public:
      * Assignment operator
      *
      * @param it - The const Iterator to assign from.
-     * @return  
+     * @return
      *      default
     */
     ConstIterator& operator=(const ConstIterator& i) = default;
@@ -331,7 +335,7 @@ public:
     const T& operator*() const;
 
     /*
-     * Sets the const Iterator to point to the next node of the one it points to, 
+     * Sets the const Iterator to point to the next node of the one it points to,
      * and then returns a reference to the updated const Iterator.
      *
      * @return
@@ -349,9 +353,9 @@ public:
      */
     bool operator!=(const ConstIterator& i) const;
 
-    /* 
-     * This exception will be thrown 
-     * if there is an attempt to perform an operation on a const Iterator, 
+    /*
+     * This exception will be thrown
+     * if there is an attempt to perform an operation on a const Iterator,
      * when it is considered illegal.
     */
     class InvalidOperation {};
@@ -461,6 +465,7 @@ Queue<T>::Queue(const Queue<T>& q)
     {
         throw Queue<T>::EmptyQueue();
     }
+
     try
     {
         this->m_head = new Node<T>();
@@ -545,7 +550,7 @@ Queue<T>::~Queue()
 
 template <typename T>
 void Queue<T>::pushBack(const T& data)
-{   
+{
     this->m_tail->m_nextNode = new Node<T>();
     this->m_tail = this->m_tail->m_nextNode;
     this->m_tail->m_data = data;
@@ -563,7 +568,7 @@ const T& Queue<T>::front() const
 }
 
 template <typename T>
- T& Queue<T>::front()
+T& Queue<T>::front()
 {
     if(this->m_size == INITIAL_SIZE)
     {
@@ -579,7 +584,7 @@ void Queue<T>::popFront()
     {
         throw Queue<T>::EmptyQueue();
     }
-    
+
     Node<T>* toDelete = this->m_head->m_nextNode;
     if(toDelete == this->m_tail)
     {
@@ -604,7 +609,7 @@ int Queue<T>::size() const
  *
  * @param q - A Queue to filter.
  * @param func - A function to filter the Queue according to.
- * 
+ *
  * @return
  *      A filtered instance of q.
 */
@@ -639,7 +644,7 @@ Queue<T> filter(const Queue<T>& q, S func)
  *
  * @param q - A Queue to transform.
  * @param func - A function which apply a transform on a given value.
- * 
+ *
  * @return
  *      void
 */

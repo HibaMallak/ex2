@@ -8,7 +8,7 @@ using std::endl;
 static const int DEFAULT_MAX_HP = 100;
 static const int MIN_HP = 0;
 
-class HealthPoints 
+class HealthPoints
 {
 public:
 
@@ -109,7 +109,7 @@ public:
 
     /* 
      * This exception will be thrown 
-     * if an invalid argument is recieved in the constructor of HealthPoints.
+     * if an invalid argument is received in the constructor of HealthPoints.
     */
     class InvalidArgument {};
 
@@ -210,13 +210,13 @@ HealthPoints operator+(const int num, const HealthPoints& healthPoints);
 
 
 /*
- * substractss a given number from the currentHP of a given HealthPoints instance.
+ * subtracts a given number from the currentHP of a given HealthPoints instance.
  *
- * @param healthPoints - The HealthPoints instance to substract the given num from.
- * @param num - The number of health points to substract from the currentHP of the given healthPoints.
+ * @param healthPoints - The HealthPoints instance to subtract the given num from.
+ * @param num - The number of health points to subtract from the currentHP of the given healthPoints.
  * 
  * @return
- *      The healthPoints instance after the substracting.
+ *      The healthPoints instance after the subtracting.
 */
 HealthPoints operator-(const HealthPoints& healthPoints, const int num);
 

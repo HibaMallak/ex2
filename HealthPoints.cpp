@@ -106,4 +106,3 @@ std::ostream& operator<<(std::ostream& os, const HealthPoints& first)
     return os << first.get_m_currentHP() << "(" << first.get_m_maxHealthPoints() << ")"  ;
 }
 
-

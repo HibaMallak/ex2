@@ -6,6 +6,7 @@ using std::endl;
 
 HealthPoints:: HealthPoints(int maxHP)
 {
+    /* InvalidArgument exception is thrown if the recieved maxHP is smaller or equal to zero.*/
     if(maxHP <= MIN_HP)
     {
         throw HealthPoints::InvalidArgument();

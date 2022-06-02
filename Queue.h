@@ -2,7 +2,7 @@
 #define EX3_QUEUE_H
 #include <new>
 
-// In the constructor, m_size initializes to zero.
+// In the constructor, m_size is initialized to zero.
 static const int INITIAL_SIZE = 0;
 
 template <typename T>
@@ -14,7 +14,7 @@ private:
      * This class of Queue is implemented using a list of Nodes.
      * The first Node of the list is a dummy Node,
      * means the first element of the Queue is at the second Node of the list.
-     * when having just the dummy Node, m_size initializes to zero.
+     * when having just the dummy Node, m_size is initialized to zero.
     */
     template <typename S>
     struct Node
@@ -54,7 +54,7 @@ private:
          * D'tor of Node class
          *
          * @return
-         *      default.
+         *      Deletes this instance of Node.
         */
         ~Node() = default;
     };
@@ -64,7 +64,6 @@ private:
     int m_size;
 
 public:
-
     /*
      * C'tor of Queue class
      *
@@ -298,7 +297,7 @@ public:
      * @return
      *      A new const Iterator.
     */
-    ConstIterator(Node<T>* pointer);
+    ConstIterator(Node<T>* pointer); 
 
     /*
      * Copy c'tor of const Iterator class
@@ -386,7 +385,7 @@ typename Queue<T>::Iterator Queue<T>::end()
 template<typename T>
 typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
 {
-
+    /* InvalidOperation exception is thrown if the iterator has no next */
     if(this->m_pointer == nullptr)
     {
         throw Queue<T>::Iterator::InvalidOperation();
@@ -433,6 +432,7 @@ typename Queue<T>::ConstIterator Queue<T>::end() const
 template<typename T>
 typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++()
 {
+    /* InvalidOperation exception is thrown if the iterator has no next */
     if(this->m_pointer == nullptr)
     {
         throw Queue<T>::ConstIterator::InvalidOperation();
@@ -461,11 +461,6 @@ Queue<T>::Queue() : m_head(new Node<T>()), m_tail(this->m_head), m_size(INITIAL_
 template <typename T>
 Queue<T>::Queue(const Queue<T>& q)
 {
-    if(q.size() == INITIAL_SIZE)
-    {
-        throw Queue<T>::EmptyQueue();
-    }
-
     try
     {
         this->m_head = new Node<T>();
@@ -483,6 +478,7 @@ Queue<T>::Queue(const Queue<T>& q)
         {
             this->pushBack(*it);
         }
+        /* when catching std::bad_alloc exception, the successfully allocated elements before will be freed */
         catch(const std::bad_alloc& e)
         {
             while(this->m_size > INITIAL_SIZE)
@@ -514,6 +510,7 @@ Queue<T>& Queue<T>::operator=(const Queue<T>& q)
             temp = temp->m_nextNode;
             temp->m_data = *it;
         }
+        /* when catching std::bad_alloc exception, the successfully allocated elements before will be freed */
         catch(const std::bad_alloc& e)
         {
             while(dummyNode != nullptr)
@@ -560,6 +557,7 @@ void Queue<T>::pushBack(const T& data)
 template <typename T>
 const T& Queue<T>::front() const
 {
+    /* EmptyQueue exception is thrown if the Queue is empty, because front does not exist.*/
     if(this->m_size == INITIAL_SIZE)
     {
         throw Queue<T>::EmptyQueue();
@@ -570,6 +568,7 @@ const T& Queue<T>::front() const
 template <typename T>
 T& Queue<T>::front()
 {
+    /* EmptyQueue exception is thrown if the Queue is empty, because front does not exist.*/
     if(this->m_size == INITIAL_SIZE)
     {
         throw Queue<T>::EmptyQueue();
@@ -580,6 +579,7 @@ T& Queue<T>::front()
 template <typename T>
 void Queue<T>::popFront()
 {
+    /* EmptyQueue exception is thrown if the Queue is empty, because front does not exist.*/
     if(this->m_size == INITIAL_SIZE)
     {
         throw Queue<T>::EmptyQueue();
